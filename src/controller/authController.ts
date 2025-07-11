@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { userInfo } from "os";
 const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
@@ -33,7 +34,7 @@ exports.register = async (req, res) => {
             },
         });
 
-        res.status(201).json({ message: "User registered successfully", email: newUser.email , name: newUser.name });
+        res.status(201).json({ message: "User registered successfully", userId: newUser.id });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
