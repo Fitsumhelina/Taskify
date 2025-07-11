@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "description": "A task management application built with Node.js, Express, and Prisma.",
   "scripts": {
-    "build": "npm run build",
+    "build": "tsc",
     "start": "npx ts-node app.ts",
     "postinstall": "prisma generate",
     "queries": "ts-node ./src/queries.ts",
