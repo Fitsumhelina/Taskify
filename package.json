@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "npx ts-node app.ts",
+    "postinstall": "prisma generate",
     "queries": "ts-node ./src/queries.ts",
     "caching": "ts-node ./src/caching.ts"
   },
