@@ -5,36 +5,40 @@ const prisma = new PrismaClient();
 
 
 exports.register = async (req, res) => {
-    const {name , email, password } = req.body;
-    
+    const { name, email, password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+        return res.status(400).json({ message: "Passwords do not match" });
+    }
+
     try {
         // Check if user already exists
         const existingUser = await prisma.user.findUnique({
-        where: { email },
+            where: { email },
         });
-    
+
         if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+            return res.status(400).json({ message: "User already exists" });
         }
-    
+
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-    
+
         // Create new user
         const newUser = await prisma.user.create({
-        data: {
-            name,
-            email,
-            password: hashedPassword,
-        },
+            data: {
+                name,
+                email,
+                password: hashedPassword,
+            },
         });
-    
-        res.status(201).json({ message: "User registered successfully", userId: newUser.id });
+
+        res.status(201).json({ message: "User registered successfully", userId: newUser.id , email: newUser.email , name: newUser.name });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
     }
-    }
+}
 
 exports.login = async (req, res) => {
     const {email, password} = req.body;
