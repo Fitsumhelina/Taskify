@@ -1,140 +1,196 @@
-# Prisma Postgres Example: Queries, Connection Pooling & Caching
+# 🧠 Simple Task Manager API (TypeScript + Express + Prisma)
 
-This project contains a sample application demonstrating various capabilities and workflows of [Prisma Postgres](https://prisma.io/data-platform/postgres):
+## 📌 Description
 
-- Schema migrations and queries (via [Prisma ORM](https://www.prisma.io/orm))
-- Connection pooling and caching (via [Prisma Accelerate](https://prisma.io/data-platform/accelerate))
+This project is a secure and scalable **RESTful API** built with:
 
-## Getting started
+* **Node.js + Express.js** for server logic
+* **TypeScript** for safer, cleaner code
+* **Prisma ORM** for database interaction
+* **JWT** for authentication
+* **bcrypt** for password hashing
 
-### 1. Set up a Prisma Postgres database in Prisma Data Platform
+It provides **user registration/login**, **task management**, and **user profile control** — all protected by JWT middleware.
 
-Follow these steps to create your Prisma Postgres database:
+---
 
-1. Log in to [Prisma Data Platform](https://console.prisma.io/).
-1. In a [workspace](https://www.prisma.io/docs/platform/about#workspace) of your choice, click the **New project** button.
-1. Type a name for your project in the **Name** field, e.g. **hello-ppg**.
-1. In the **Prisma Postgres** section, click the **Get started** button.
-1. In the **Region** dropdown, select the region that's closest to your current location, e.g. **US East (N. Virginia)**.
-1. Click the **Create project** button.
-
-At this point, you'll be redirected to the **Database** page where you will need to wait a few seconds while the status of your database changes from **`PROVISIONING`**, to **`ACTIVATING`** to **`CONNECTED`**.
-
-Once the green **`CONNECTED`** label appears, your database is ready to use!
-
-Then, find your database credentials in the **Set up database access** section, copy the `DATABASE_URL` environment variable and store it securely.
-
-```bash no-copy
-DATABASE_URL=<your-database-url>
-```
-
-> These `DATABASE_URL` environment variable will be required in the next steps.
-
-Once that setup process has finished, move to the next step.
-
-### 2. Download example and install dependencies
-
-Copy the `try-prisma` command that', paste it into your terminal, and execute it:
-
-```terminal
-npx try-prisma@latest \
-  --template databases/prisma-postgres \
-  --name hello-prisma \
-  --install npm
-```
-
-<!-- For reference, this is what the command looks like (note that the `__YOUR_DATABASE_CONNECTION_STRING__` placeholder must be replaced with _your_ actual database connection string):
+## 🗂️ Project Structure
 
 ```
-npx try-prisma@latest
-  --template databases/prisma-postgres
-  --connection-string __YOUR_DATABASE_CONNECTION_STRING__
-  --name hello-prisma
-  --install npm
+├── prisma/                 # Prisma schema & DB migration logic
+├── src/
+│   ├── controller/         # Logic for auth, task, and user
+│   │   ├── authController.ts
+│   │   ├── taskController.ts
+│   │   └── userController.ts
+│   ├── middleware/
+│   │   └── authMiddleware.ts   # JWT verification middleware
+│   ├── routes/
+│   │   ├── taskRoute.ts        # /api/tasks
+│   │   └── userRoute.ts        # /api/users
+│   ├── app.ts                 # Main express app
+│   ├── caching.ts             # Optional (Redis/local caching)
+│   └── queries.ts             # Optional (custom queries)
+├── .env                      # Env variables like DB and JWT secret
+├── nodemon.json              # Auto-reloading config for dev
+├── package.json              # Dependencies and scripts
+├── tsconfig.json             # TypeScript config
 ```
 
-Your connection string that should replace the `__YOUR_DATABASE_CONNECTION_STRING__` placeholder looks similar to this: `prisma+postgres://accelerate.prisma-data.net/?api_key=ey...`
--->
+---
 
-Navigate into the project directory and (if you haven't done so via the CLI wizard) install dependencies:
+## 📦 Install Dependencies
 
-```terminal
-cd hello-prisma
+```bash
 npm install
 ```
 
-### 3. Set database connection
+---
 
-The connection to your database is configured via environment variables in a `.env` file.
+## ⚙️ Environment Setup
 
-First, rename the existing `.env.example` file to just `.env`:
+Create a `.env` file at the root with:
 
-```terminal
-mv .env.example .env
+```env
+DATABASE_URL=postgresql://<your-user>:<password>@localhost:5432/<your-db>
+JWT_SECRET=your_jwt_secret
+PORT=5000
 ```
 
-Then, find your database credentials in the **Set up database access** section, copy the `DATABASE_URL` environment variable and paste them into the `.env` file.
-
-For reference, the file should now look similar to this:
+Make sure to run:
 
 ```bash
-DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=ey...."
-```
-
-### 4. Create database tables (with a schema migration)
-
-Next, you need to create the tables in your database. You can do this by creating and executing a schema migration with the following command of the Prisma CLI:
-
-```terminal
+npx prisma generate
 npx prisma migrate dev --name init
 ```
 
-This will map the `User` and `Post` models that are defined in your [Prisma schema](./prisma/schema.prisma) to your database. You can also review the SQL migration that was executed and created the tables in the newly created `prisma/migrations` directory.
+---
 
-### 5. Execute queries with Prisma ORM
+## 💻 Running the App (Development Mode)
 
-The [`src/queries.ts`](./src/queries.ts) script contains a number of CRUD queries that will write and read data in your database. You can execute it by running the following command in your terminal:
+You can run it with `ts-node` and `nodemon`:
 
-```terminal
-npm run queries
+```bash
+npm run dev
 ```
 
-Once the script has completed, you can inspect the logs in your terminal or use Prisma Studio to explore what records have been created in the database:
+### ✅ `nodemon.json`
 
-```terminal
-npx prisma studio
+Ensure this config exists:
+
+```json
+{
+  "watch": ["src"],
+  "ext": "ts",
+  "exec": "ts-node ./src/app.ts"
+}
 ```
 
-### 6. Explore caching with Prisma Accelerate
+### ✅ Scripts in `package.json`
 
-The [`src/caching.ts`](./src/caching.ts) script contains a sample query that uses [Stale-While-Revalidate](https://www.prisma.io/docs/accelerate/caching#stale-while-revalidate-swr) (SWR) and [Time-To-Live](https://www.prisma.io/docs/accelerate/caching#time-to-live-ttl) (TTL) to cache a database query using Prisma Accelerate. You can execute it as follows:
-
-```terminal
-npm run caching
+```json
+"scripts": {
+  "dev": "nodemon",
+  "build": "tsc",
+  "start": "node dist/app.js"
+}
 ```
 
-Take note of the time that it took to execute the query, e.g.:
+---
 
-```terminal
-The query took 2009.2467149999998ms.
+## 🔐 Auth & User Endpoints
+
+**Base Path:** `/api/users`
+
+| Method | Endpoint    | Protected | Description                 |
+| ------ | ----------- | --------- | --------------------------- |
+| POST   | `/register` | ❌         | Register new user           |
+| POST   | `/login`    | ❌         | Login and receive JWT token |
+| GET    | `/profile`  | ✅         | Get current user profile    |
+| PUT    | `/profile`  | ✅         | Update user name/email      |
+| DELETE | `/profile`  | ✅         | Delete user and their data  |
+
+### 🔐 JWT Usage
+
+All protected routes require the following header:
+
+```
+Authorization: Bearer <your_token_here>
 ```
 
-Now, run the script again:
+---
 
-```terminal
-npm run caching
+## 📋 Task Endpoints
+
+**Base Path:** `/api/tasks`
+
+| Method | Endpoint     | Protected | Description                |
+| ------ | ------------ | --------- | -------------------------- |
+| POST   | `/`          | ✅         | Create a new task          |
+| GET    | `/`          | ✅         | Get all tasks for the user |
+| PUT    | `/:id`       | ✅         | Update a task              |
+| DELETE | `/tasks/:id` | ✅         | Delete a task              |
+
+---
+
+## 📦 Example JSON Requests
+
+### 🔑 Register
+
+```json
+POST /api/users/register
+{
+  "name": "fitsum",
+  "email": "fitse@gmail.com",
+  "password": "1234",
+  "confirmPassword": "1234"
+}
 ```
 
-You'll notice that the time the query took will be a lot shorter this time, e.g.:
+### 🔑 Login
 
-```terminal
-The query took 300.5655280000001ms.
+```json
+POST /api/users/login
+{
+  "email": "fitse@gmail.com",
+  "password": "1234"
+}
 ```
 
-## Next steps
+### 📌 Create Task
 
-- Check out the [Prisma docs](https://www.prisma.io/docs)
-- [Join our community on Discord](https://pris.ly/discord?utm_source=github&utm_medium=prisma_examples&utm_content=next_steps_section) to share feedback and interact with other users.
-- [Subscribe to our YouTube channel](https://pris.ly/youtube?utm_source=github&utm_medium=prisma_examples&utm_content=next_steps_section) for live demos and video tutorials.
-- [Follow us on X](https://pris.ly/x?utm_source=github&utm_medium=prisma_examples&utm_content=next_steps_section) for the latest updates.
-- Report issues or ask [questions on GitHub](https://pris.ly/github?utm_source=github&utm_medium=prisma_examples&utm_content=next_steps_section).
+```json
+POST /api/tasks/
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "name": "Finish project",
+  "status": "in-progress",
+  "userId": 1
+}
+```
+
+---
+
+## 🔍 Error Handling
+
+* 400 for validation errors
+* 401 for auth errors
+* 500 for internal server issues (with `console.error`)
+
+---
+
+## ✨ Improvements You Could Add
+
+* ✅ Zod or Joi for request validation
+* ✅ Swagger documentation
+* ✅ Role-based access control
+* ✅ Pagination for task fetching
+* ✅ Unit tests with Jest or Vitest
+
+---
+
+## 🧠 Author
+
+Built by **Fitsum**, a passionate software engineer based in Ethiopia 🇪🇹.
+
