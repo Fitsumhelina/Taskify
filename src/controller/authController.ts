@@ -33,12 +33,12 @@ exports.register = async (req, res) => {
             },
         });
 
-        res.status(201).json({ message: "User registered successfully", userId: newUser.id , email: newUser.email , name: newUser.name });
+        res.status(201).json({ message: "User registered successfully", email: newUser.email , name: newUser.name });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
     }
-}
+}   
 
 exports.login = async (req, res) => {
     const {email, password} = req.body;
