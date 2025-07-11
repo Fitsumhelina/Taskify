@@ -36,7 +36,7 @@ exports.updateTask = async (req, res) => {
     const { name, status } = req.body;
     try {
         const updatedTask = await prisma.task.update({
-            where: { id: parseInt(id) },
+            where: { id },
             data: { name, status }
         });
         res.status(200).json({ message: "Task updated successfully", task: updatedTask });
@@ -50,7 +50,7 @@ exports.deleteTask = async (req, res) => {
     const { id } = req.params;
     try {
         await prisma.task.delete({
-            where: { id: parseInt(id) }
+            where: { id }
         });
         res.status(200).json({ message: "Task deleted successfully" });
     } catch (error) {

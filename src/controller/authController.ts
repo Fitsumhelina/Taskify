@@ -1,5 +1,5 @@
+import jwt from "jsonwebtoken";
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -55,7 +55,5 @@ exports.login = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
-    }
-
-    
+    } 
 }
