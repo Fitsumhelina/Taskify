@@ -11,24 +11,39 @@ app.use('/', userRoute);
 app.use('/tasks', taskRoute);
 
 app.get('/', (req, res) => {
-    const readmePath = path.resolve(process.cwd(), '../README.md');
-    fs.readFile(readmePath, 'utf8', (err, data) => {
-        if (err) {
-            return res.status(500).send('Error reading README.md');
-        }
-        const htmlContent = marked(data);
-        res.send(`
-            <html>
-                <head>
-                    <title>Taskify README</title>
-                    <meta charset="UTF-8" />
-                </head>
-                <body style="font-family: sans-serif; padding: 2rem;">
-                    ${htmlContent}
-                </body>
-            </html>
-        `);
-    });
+    const possiblePaths = [
+    path.resolve(__dirname, '../README.md'),
+    path.resolve(process.cwd(), 'README.md'),
+];
+
+let readmePath: string | null = null;
+
+for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+        readmePath = p;
+        break;
+    }
+}
+
+if (!readmePath) {
+    return res.status(500).send('README.md file not found');
+}
+
+fs.readFile(readmePath, 'utf8', (err, data) => {
+    if (err) {
+        return res.status(500).send('Failed to read README.md');
+    }
+
+    const html = marked(data);
+    res.send(`
+        <html>
+            <head><title>Taskify README</title></head>
+            <body style="font-family: sans-serif; padding: 2rem;">
+                ${html}
+            </body>
+        </html>
+    `);
+});
 });
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
