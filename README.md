@@ -177,17 +177,6 @@ Authorization: Bearer <JWT_TOKEN>
 * 400 for validation errors
 * 401 for auth errors
 * 500 for internal server issues (with `console.error`)
-
----
-
-## ✨ Improvements You Could Add
-
-* ✅ Zod or Joi for request validation
-* ✅ Swagger documentation
-* ✅ Role-based access control
-* ✅ Pagination for task fetching
-* ✅ Unit tests with Jest or Vitest
-
 ---
 
 ## 🧠 Author

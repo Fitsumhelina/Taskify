@@ -12,8 +12,8 @@ app.use('/tasks', taskRoute);
 
 app.get('/', (req, res) => {
     const possiblePaths = [
-    path.resolve(__dirname, '../README.md'),
-    path.resolve(process.cwd(), 'README.md'),
+    path.resolve(__dirname, '../Index.md'),
+    path.resolve(process.cwd(), 'Index.md'),
 ];
 
 let readmePath: string | null = null;
