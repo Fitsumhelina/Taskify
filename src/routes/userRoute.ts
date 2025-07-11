@@ -11,3 +11,5 @@ router.post("/login", authController.login);
 router.get("/profile", authMiddleware, userController.getProfile);
 router.put("/profile", authMiddleware, userController.updateProfile);
 router.delete("/profile", authMiddleware, userController.deleteProfile);
+
+module.exports = router;
