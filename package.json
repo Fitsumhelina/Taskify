@@ -1,6 +1,9 @@
 {
-  "name": "hello-prisma",
+  "name": "taskify",
   "license": "MIT",
+  "author": "Fitsum",
+  "version": "1.0.0",
+  "description": "A task management application built with Node.js, Express, and Prisma.",
   "scripts": {
     "queries": "ts-node ./src/queries.ts",
     "caching": "ts-node ./src/caching.ts"
@@ -16,7 +19,7 @@
   },
   "devDependencies": {
     "prisma": "6.9.0",
-    "ts-node": "10.9.2",
-    "typescript": "5.8.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   }
 }
