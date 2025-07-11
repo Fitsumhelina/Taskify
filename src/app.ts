@@ -11,7 +11,7 @@ app.use('/', userRoute);
 app.use('/tasks', taskRoute);
 
 app.get('/', (req, res) => {
-    const readmePath = path.join(__dirname, '../README.md');
+    const readmePath = path.resolve(process.cwd(), '../README.md');
     fs.readFile(readmePath, 'utf8', (err, data) => {
         if (err) {
             return res.status(500).send('Error reading README.md');
