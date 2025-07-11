@@ -1,7 +1,7 @@
 {
   "name": "taskify",
   "license": "MIT",
-  "author": "Fitsum",
+  "author": "Fitsum Helina",
   "version": "1.0.0",
   "description": "A task management application built with Node.js, Express, and Prisma.",
   "scripts": {
