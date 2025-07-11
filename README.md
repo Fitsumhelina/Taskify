@@ -71,7 +71,7 @@ npx prisma migrate dev --name init
 You can run it with `ts-node` and `nodemon`:
 
 ```bash
-npm run dev
+npx ts-node app.ts 
 ```
 
 ### ✅ `nodemon.json`
