@@ -68,23 +68,22 @@ npx prisma migrate dev --name init
 
 ## 💻 Running the App (Development Mode)
 
-You can run it with `ts-node` and `nodemon`:
+You can run it with `ts-node` or `node` after build it:
+
+to build 
+```bash
+npm run build
+```
+```bash
+node dist/app.js
+```
+
+to run it directly 
 
 ```bash
 npx ts-node app.ts 
 ```
 
-### ✅ `nodemon.json`
-
-Ensure this config exists:
-
-```json
-{
-  "watch": ["src"],
-  "ext": "ts",
-  "exec": "ts-node ./src/app.ts"
-}
-```
 
 ### ✅ Scripts in `package.json`
 
@@ -100,15 +99,15 @@ Ensure this config exists:
 
 ## 🔐 Auth & User Endpoints
 
-**Base Path:** `/api/users`
+**Base Path:** `/`
 
 | Method | Endpoint    | Protected | Description                 |
 | ------ | ----------- | --------- | --------------------------- |
-| POST   | `/register` | ❌         | Register new user           |
-| POST   | `/login`    | ❌         | Login and receive JWT token |
-| GET    | `/profile`  | ✅         | Get current user profile    |
-| PUT    | `/profile`  | ✅         | Update user name/email      |
-| DELETE | `/profile`  | ✅         | Delete user and their data  |
+| POST   | `register` | ❌         | Register new user           |
+| POST   | `login`    | ❌         | Login and receive JWT token |
+| GET    | `profile`  | ✅         | Get current user profile    |
+| PUT    | `profile`  | ✅         | Update user name/email      |
+| DELETE | `profile`  | ✅         | Delete user and their data  |
 
 ### 🔐 JWT Usage
 
@@ -122,14 +121,14 @@ Authorization: Bearer <your_token_here>
 
 ## 📋 Task Endpoints
 
-**Base Path:** `/api/tasks`
+**Base Path:** `/tasks`
 
 | Method | Endpoint     | Protected | Description                |
 | ------ | ------------ | --------- | -------------------------- |
 | POST   | `/`          | ✅         | Create a new task          |
 | GET    | `/`          | ✅         | Get all tasks for the user |
 | PUT    | `/:id`       | ✅         | Update a task              |
-| DELETE | `/tasks/:id` | ✅         | Delete a task              |
+| DELETE | `/:id` | ✅         | Delete a task              |
 
 ---
 
@@ -138,7 +137,7 @@ Authorization: Bearer <your_token_here>
 ### 🔑 Register
 
 ```json
-POST /api/users/register
+POST /register
 {
   "name": "fitsum",
   "email": "fitse@gmail.com",
@@ -150,7 +149,7 @@ POST /api/users/register
 ### 🔑 Login
 
 ```json
-POST /api/users/login
+POST /login
 {
   "email": "fitse@gmail.com",
   "password": "1234"
@@ -160,7 +159,7 @@ POST /api/users/login
 ### 📌 Create Task
 
 ```json
-POST /api/tasks/
+POST /tasks/
 Authorization: Bearer <JWT_TOKEN>
 
 {
